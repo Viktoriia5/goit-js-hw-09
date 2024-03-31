@@ -5,11 +5,16 @@ const message = document.querySelector('textarea[name="message"]');
 
 form.addEventListener('input', inputFormHandle);
 form.addEventListener('submit', submitFormHandle);
+document.addEventListener('DOMContentLoaded', renderPage);
 
 let emailForm = {};
 function inputFormHandle(event) {
-  event.preventDefault();
-  emailForm.email = event.target.email;
+  const { email, message } = event.currentTarget.elements;
+  const userData = {
+    email: email.value.trim(),
+    message: message.value.trim(),
+  };
+  localStorage.setItem(formState, JSON.stringify(userData));
 }
 
 function submitFormHandle(event) {
@@ -21,15 +26,17 @@ function submitFormHandle(event) {
   }
   console.log(emailForm);
 
-  if (emailForm.email.length && emailForm.message.length > 0) {
-    localStorage.setItem(formState, JSON.stringify(emailForm));
-  }
+  localStorage.removeItem(formState);
   form.reset();
 }
 
-let savedItem = localStorage.getItem(formState);
+function renderPage() {
+  let savedItem = localStorage.getItem(formState);
 
-let parcedSavedItems = JSON.parse(savedItem);
+  let parcedSavedItems = JSON.parse(savedItem);
 
-email.value = parcedSavedItems.email ?? '';
-message.value = parcedSavedItems.message ?? '';
+  if (parcedSavedItems) {
+    email.value = parcedSavedItems.email ?? '';
+    message.value = parcedSavedItems.message ?? '';
+  }
+}
