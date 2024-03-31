@@ -16,6 +16,9 @@ function submitFormHandle(event) {
   event.preventDefault();
   emailForm.email = email.value.trim();
   emailForm.message = message.value.trim();
+  if (!email.value || !message.value) {
+    return alert('Email or message is empty!');
+  }
   console.log(emailForm);
 
   if (emailForm.email.length && emailForm.message.length > 0) {
